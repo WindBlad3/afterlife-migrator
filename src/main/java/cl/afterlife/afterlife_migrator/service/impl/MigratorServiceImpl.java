@@ -38,13 +38,14 @@ public class MigratorServiceImpl implements MigratorService {
             this.executeMirrorGitClone(migratorRequest);
             this.executeCreateProject(migratorRequest, gitlabToken);
             this.executeUploadProject(migratorRequest);
+            log.info("Migration executed successfully!");
             return ResponseEntity.ok(this.migratorUtils.createResponse("Migration executed successfully!", false));
         } catch (ExecuteException ee) {
             return ResponseEntity.status(409).body(this.migratorUtils.createResponse("Error in execute the command, error: ".concat(ee.getMessage()), true));
         } catch (MalformedURLException me) {
             return ResponseEntity.status(400).body(this.migratorUtils.createResponse("Incorrect gitlab URL structure, please check, error: ".concat(me.toString()), true));
         } catch (IOException io) {
-            return ResponseEntity.status(512).body(this.migratorUtils.createResponse("Error created local directory, error: ".concat(io.toString()), true));
+            return ResponseEntity.status(512).body(this.migratorUtils.createResponse("Error access or created local directory, error: ".concat(io.toString()), true));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(this.migratorUtils.createResponse("Unexpected error: ".concat(e.getMessage()), true));
         }
@@ -74,12 +75,29 @@ public class MigratorServiceImpl implements MigratorService {
         URL url = new URL(migratorRequest.getToGitlab());
         String urlGitlab = url.getProtocol().concat("://").concat(url.getAuthority()).concat("/api/v4");
         String namespaceId = this.gitlabClientService.getGroup(urlGitlab, gitlabToken, url.getPath().replace("/", "")).getBody().get("id").asText();
-        this.gitlabClientService.createProject(urlGitlab, gitlabToken, migratorRequest.getToName(), namespaceId, "private");
-
+        ResponseEntity response = this.gitlabClientService.createProject(urlGitlab, gitlabToken, migratorRequest.getToName(), namespaceId, "private");
+        if (response.getStatusCode().is2xxSuccessful()) {
+            log.info("Project created successfully in Gitlab!");
+        }
     }
 
-    private void executeUploadProject(MigratorRequest migratorRequest) {
+    private void executeUploadProject(MigratorRequest migratorRequest) throws IOException {
+        CommandLine commandLine1 = CommandLine.parse("cd");
+        commandLine1.addArgument(migratorRequest.getDownloadDirectory());
+        DefaultExecutor.builder().get().execute(commandLine1);
 
+        CommandLine commandLine2 = CommandLine.parse("git");
+        commandLine2.addArgument("remote");
+        commandLine2.addArgument("add");
+        commandLine2.addArgument("gitlab");
+        commandLine2.addArgument(migratorRequest.getToGitlab().concat(migratorRequest.getToName()).concat(".git"));
+        DefaultExecutor.builder().get().execute(commandLine2);
+
+        CommandLine commandLine3 = CommandLine.parse("git");
+        commandLine3.addArgument("push");
+        commandLine3.addArgument("--mirror");
+        commandLine3.addArgument("gitlab");
+        DefaultExecutor.builder().get().execute(commandLine3);
 
     }
 

@@ -26,7 +26,6 @@ repositories {
 ext {
     set("springCloudVersion", "2024.0.0")
     set("commonsExecVersion", "1.4.0")
-    set("feignJacksonVersion", "13.5")
 }
 
 dependencies {
@@ -35,7 +34,6 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.apache.commons:commons-exec:${commonsExecVersion}"
-    implementation "io.github.openfeign:feign-jackson:${feignJacksonVersion}"
     compileOnly "org.projectlombok:lombok"
     developmentOnly "org.springframework.boot:spring-boot-devtools"
     annotationProcessor "org.projectlombok:lombok"
