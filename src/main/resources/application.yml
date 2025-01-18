@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: afterlife-migrator
+
+application:
+  title: 'Author: Gabriel Alonso Rojas Araneda'
+  version: ${version?:unknown}
