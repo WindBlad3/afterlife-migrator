@@ -11,7 +11,7 @@ The following was discovered as part of building this project:
 
 ### Start
 
-Locate in the build/libs folder and then run the command java -jar <name-of-compile-jar>.jar
+Locate in the build/libs folder and then run the command java -jar 'name-of-compile-jar'.jar
 
 ### Reference Documentation
 
