@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="cl.afterlife.afterlife_migrator.AfterlifeMigratorApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-01-19T21:30:53" hostname="L4PT0P-VID4CHE2" time="2.065">
+  <properties/>
+  <testcase name="contextLoads()" classname="cl.afterlife.afterlife_migrator.AfterlifeMigratorApplicationTests" time="2.065"/>
+  <system-out><![CDATA[18:30:43.465 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [cl.afterlife.afterlife_migrator.AfterlifeMigratorApplicationTests]: AfterlifeMigratorApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+18:30:43.733 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration cl.afterlife.afterlife_migrator.AfterlifeMigratorApplication for test class cl.afterlife.afterlife_migrator.AfterlifeMigratorApplicationTests
+     _     __ _            _ _  __ _____                 _                 _    ___
+    / \   / _| |_ ___ _ __| / |/ _|___ /       _ __ ___ (_) __ _ _ __ __ _| |_ / _ \ _ __
+   / _ \ | |_| __/ _ \ '__| | | |_  |_ \ _____| '_ ` _ \| |/ _` | '__/ _` | __| | | | '__|
+  / ___ \|  _| ||  __/ |  | | |  _|___) |_____| | | | | | | (_| | | | (_| | |_| |_| | |
+ /_/   \_\_|  \__\___|_|  |_|_|_| |____/      |_| |_| |_|_|\__, |_|  \__,_|\__|\___/|_|
+                                                           |___/
+Author: Gabriel Alonso Rojas Araneda - Version: 0.0.1-SNAPSHOT
+Powered by Spring Boot 3.4.1
+---------------------------------------------
+2025-01-19T18:30:46.364-03:00  INFO 25084 --- [afterlife-migrator] [    Test worker] c.a.a.AfterlifeMigratorApplicationTests  : Starting AfterlifeMigratorApplicationTests using Java 17.0.6 with PID 25084 (started by garoj in C:\Development\Repositories\afterlife-migrator)
+2025-01-19T18:30:46.368-03:00  INFO 25084 --- [afterlife-migrator] [    Test worker] c.a.a.AfterlifeMigratorApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2025-01-19T18:30:48.762-03:00  INFO 25084 --- [afterlife-migrator] [    Test worker] o.s.cloud.context.scope.GenericScope     : BeanFactory id=20d5d608-6f06-3cdb-b693-899d012edc89
+2025-01-19T18:30:52.969-03:00  INFO 25084 --- [afterlife-migrator] [    Test worker] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2025-01-19T18:30:53.022-03:00  INFO 25084 --- [afterlife-migrator] [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-01-19T18:30:53.153-03:00  INFO 25084 --- [afterlife-migrator] [    Test worker] c.a.a.AfterlifeMigratorApplicationTests  : Started AfterlifeMigratorApplicationTests in 8.837 seconds (process running for 11.695)
+2025-01-19T18:30:55.248-03:00  INFO 25084 --- [afterlife-migrator] [    Test worker] o.s.c.openfeign.FeignClientFactoryBean   : For 'gitlabClient' URL not provided. Will try picking an instance via load-balancing.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

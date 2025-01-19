@@ -79,7 +79,7 @@ public class MigratorServiceImpl implements MigratorService {
     private void executeUploadProject(MigratorRequest migratorRequest) throws IOException {
 
         DefaultExecutor defaultExecutor = DefaultExecutor.builder().setWorkingDirectory(new File(migratorRequest.getDownloadDirectory())).get();
-        
+
         CommandLine commandLineRemoteAdd = CommandLine.parse("git");
         commandLineRemoteAdd.addArgument("remote");
         commandLineRemoteAdd.addArgument("add");
@@ -92,7 +92,6 @@ public class MigratorServiceImpl implements MigratorService {
         commandLinePushMirror.addArgument("--mirror");
         commandLinePushMirror.addArgument("gitlab");
         defaultExecutor.execute(commandLinePushMirror);
-
 
     }
 
