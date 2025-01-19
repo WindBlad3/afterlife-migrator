@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"from-github\": \"https://github.com/WindBlad3/\",\r\n    \"from-name\": \"afterlife-eureka-server\",\r\n    \"to-gitlab\": \"https://gitlab.com/afterlife6393803/\",\r\n    \"to-name\": \"afterlife-eureka-server-migrated\",\r\n    \"download-directory\": \"./repositories/\"\r\n}",
+					"raw": "{\r\n    \"from-github\": \"https://github.com/WindBlad3/\",\r\n    \"from-name\": \"RESTful-Web-Service-Practice-JavaApplication\",\r\n    \"to-gitlab\": \"https://gitlab.com/afterlife6393803/\",\r\n    \"to-name\": \"RESTful-Web-Service-Practice-JavaApplication-migrated\",\r\n    \"download-directory\": \"./repositories/\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -42,7 +42,72 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Migrator [Github -> Gitlab]",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Gitlab-Token",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from-github\": \"https://github.com/WindBlad3/\",\r\n    \"from-name\": \"RESTful-Web-Service-Practice-JavaApplication\",\r\n    \"to-gitlab\": \"https://gitlab.com/afterlife6393803/\",\r\n    \"to-name\": \"RESTful-Web-Service-Practice-JavaApplication-migrated\",\r\n    \"download-directory\": \"./repositories/\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/afterlife-migrator/repositories/github/to/gitlab",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"afterlife-migrator",
+								"repositories",
+								"github",
+								"to",
+								"gitlab"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 19 Jan 2025 22:52:47 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"Afterl1f3-migrat0r\": {\n        \"result\": \"Migration executed successfully!\",\n        \"status\": \"OK\"\n    }\n}"
+				}
+			]
 		}
 	]
 }
