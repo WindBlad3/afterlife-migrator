@@ -12,7 +12,7 @@ public class MigratorUtils {
         HashMap<String, String> resultResponse = new HashMap<>();
         resultResponse.put("status", isError ? MigratorEnum.ERROR.name() : MigratorEnum.OK.name());
         resultResponse.put("result", result);
-        HashMap<String, HashMap<String, String>> response = new HashMap();
+        HashMap<String, HashMap<String, String>> response = new HashMap<>();
         response.put("Afterl1f3-migrat0r", resultResponse);
         return response;
     }
