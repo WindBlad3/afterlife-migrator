@@ -8,12 +8,11 @@ import java.util.Map;
 
 @Component
 public class MigratorUtils {
-
     public Map<String, HashMap<String, String>> createResponse(String result, boolean isError) {
-        HashMap resultResponse = new HashMap<String, String>();
+        HashMap<String, String> resultResponse = new HashMap<>();
         resultResponse.put("status", isError ? MigratorEnum.ERROR.name() : MigratorEnum.OK.name());
         resultResponse.put("result", result);
-        HashMap response = new HashMap<String, HashMap<String, String>>();
+        HashMap<String, HashMap<String, String>> response = new HashMap();
         response.put("Afterl1f3-migrat0r", resultResponse);
         return response;
     }
