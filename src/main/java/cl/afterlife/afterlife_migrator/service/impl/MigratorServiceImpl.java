@@ -79,18 +79,13 @@ public class MigratorServiceImpl implements MigratorService {
     private void executeUploadProject(MigratorRequest migratorRequest) throws IOException {
 
         DefaultExecutor defaultExecutor = DefaultExecutor.builder().setWorkingDirectory(new File(migratorRequest.getDownloadDirectory())).get();
-
-        CommandLine commandLineCheckRemote = CommandLine.parse("git remote get-url gitlab");
-        int isExistsRemote = defaultExecutor.execute(commandLineCheckRemote);
-
-        if (isExistsRemote != 0) {
-            CommandLine commandLineRemoteAdd = CommandLine.parse("git");
-            commandLineRemoteAdd.addArgument("remote");
-            commandLineRemoteAdd.addArgument("add");
-            commandLineRemoteAdd.addArgument("gitlab");
-            commandLineRemoteAdd.addArgument(migratorRequest.getToGitlab().concat(migratorRequest.getToName()).concat(".git"));
-            defaultExecutor.execute(commandLineRemoteAdd);
-        }
+        
+        CommandLine commandLineRemoteAdd = CommandLine.parse("git");
+        commandLineRemoteAdd.addArgument("remote");
+        commandLineRemoteAdd.addArgument("add");
+        commandLineRemoteAdd.addArgument("gitlab");
+        commandLineRemoteAdd.addArgument(migratorRequest.getToGitlab().concat(migratorRequest.getToName()).concat(".git"));
+        defaultExecutor.execute(commandLineRemoteAdd);
 
         CommandLine commandLinePushMirror = CommandLine.parse("git");
         commandLinePushMirror.addArgument("push");
