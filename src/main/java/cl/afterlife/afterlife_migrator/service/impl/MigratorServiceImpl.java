@@ -4,14 +4,15 @@ import cl.afterlife.afterlife_migrator.client.service.GitlabClientService;
 import cl.afterlife.afterlife_migrator.service.MigratorService;
 import cl.afterlife.afterlife_migrator.service.dto.MigratorRequest;
 import cl.afterlife.afterlife_migrator.util.MigratorUtils;
+import feign.FeignException;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.ExecuteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,23 +33,13 @@ public class MigratorServiceImpl implements MigratorService {
     private MigratorUtils migratorUtils;
 
     @Override
-    public ResponseEntity<Map<String, HashMap<String, String>>> migratorFromGithubToGitlab(String gitlabToken, MigratorRequest migratorRequest) {
-        try {
-            this.createDownloadDirectory(migratorRequest);
-            this.executeMirrorGitClone(migratorRequest);
-            this.executeCreateProject(migratorRequest, gitlabToken);
-            this.executeUploadProject(migratorRequest);
-            log.info("Migration executed successfully!");
-            return ResponseEntity.ok(this.migratorUtils.createResponse("Migration executed successfully!", false));
-        } catch (ExecuteException ee) {
-            return ResponseEntity.status(409).body(this.migratorUtils.createResponse("Error in execute the command, error: ".concat(ee.getMessage()), true));
-        } catch (MalformedURLException me) {
-            return ResponseEntity.status(400).body(this.migratorUtils.createResponse("Incorrect gitlab URL structure, please check, error: ".concat(me.toString()), true));
-        } catch (IOException io) {
-            return ResponseEntity.status(512).body(this.migratorUtils.createResponse("Error access or created local directory, error: ".concat(io.toString()), true));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(this.migratorUtils.createResponse("Unexpected error: ".concat(e.getMessage()), true));
-        }
+    public ResponseEntity<Map<String, HashMap<String, String>>> migratorFromGithubToGitlab(String gitlabToken, MigratorRequest migratorRequest) throws IOException {
+        this.createDownloadDirectory(migratorRequest);
+        this.executeMirrorGitClone(migratorRequest);
+        this.executeCreateProject(migratorRequest, gitlabToken);
+        this.executeUploadProject(migratorRequest);
+        log.info("Migration executed successfully!");
+        return ResponseEntity.ok(this.migratorUtils.createResponse("Migration executed successfully!", false));
     }
 
     private void createDownloadDirectory(MigratorRequest migratorRequest) throws IOException {
@@ -62,12 +53,12 @@ public class MigratorServiceImpl implements MigratorService {
     private void executeMirrorGitClone(MigratorRequest migratorRequest) throws IOException {
         Path path = Paths.get(migratorRequest.getDownloadDirectory());
         if (Files.exists(path) && Files.list(path).count() == 0) {
-            CommandLine commandLine = CommandLine.parse("git");
-            commandLine.addArgument("clone");
-            commandLine.addArgument("--mirror");
-            commandLine.addArgument(migratorRequest.getFromGithub().concat(migratorRequest.getFromName()).concat(".git"));
-            commandLine.addArgument(migratorRequest.getDownloadDirectory());
-            DefaultExecutor.builder().get().execute(commandLine);
+            CommandLine commandLineCloneMirror = CommandLine.parse("git");
+            commandLineCloneMirror.addArgument("clone");
+            commandLineCloneMirror.addArgument("--mirror");
+            commandLineCloneMirror.addArgument(migratorRequest.getFromGithub().concat(migratorRequest.getFromName()).concat(".git"));
+            commandLineCloneMirror.addArgument(migratorRequest.getDownloadDirectory());
+            DefaultExecutor.builder().get().execute(commandLineCloneMirror);
         }
     }
 
@@ -75,29 +66,38 @@ public class MigratorServiceImpl implements MigratorService {
         URL url = new URL(migratorRequest.getToGitlab());
         String urlGitlab = url.getProtocol().concat("://").concat(url.getAuthority()).concat("/api/v4");
         String namespaceId = this.gitlabClientService.getGroup(urlGitlab, gitlabToken, url.getPath().replace("/", "")).getBody().get("id").asText();
-        ResponseEntity response = this.gitlabClientService.createProject(urlGitlab, gitlabToken, migratorRequest.getToName(), namespaceId, "private");
-        if (response.getStatusCode().is2xxSuccessful()) {
-            log.info("Project created successfully in Gitlab!");
+        try {
+            ResponseEntity response = this.gitlabClientService.createProject(urlGitlab, gitlabToken, migratorRequest.getToName(), namespaceId, "private");
+            if (response.getStatusCode().is2xxSuccessful()) {
+                log.info("Project created successfully in Gitlab!");
+            }
+        } catch (FeignException fe) {
+            log.warn("Unexpected error trying create the project in Gitlab!");
         }
     }
 
     private void executeUploadProject(MigratorRequest migratorRequest) throws IOException {
-        CommandLine commandLine1 = CommandLine.parse("cd");
-        commandLine1.addArgument(migratorRequest.getDownloadDirectory());
-        DefaultExecutor.builder().get().execute(commandLine1);
 
-        CommandLine commandLine2 = CommandLine.parse("git");
-        commandLine2.addArgument("remote");
-        commandLine2.addArgument("add");
-        commandLine2.addArgument("gitlab");
-        commandLine2.addArgument(migratorRequest.getToGitlab().concat(migratorRequest.getToName()).concat(".git"));
-        DefaultExecutor.builder().get().execute(commandLine2);
+        DefaultExecutor defaultExecutor = DefaultExecutor.builder().setWorkingDirectory(new File(migratorRequest.getDownloadDirectory())).get();
 
-        CommandLine commandLine3 = CommandLine.parse("git");
-        commandLine3.addArgument("push");
-        commandLine3.addArgument("--mirror");
-        commandLine3.addArgument("gitlab");
-        DefaultExecutor.builder().get().execute(commandLine3);
+        CommandLine commandLineCheckRemote = CommandLine.parse("git remote get-url gitlab");
+        int isExistsRemote = defaultExecutor.execute(commandLineCheckRemote);
+
+        if (isExistsRemote != 0) {
+            CommandLine commandLineRemoteAdd = CommandLine.parse("git");
+            commandLineRemoteAdd.addArgument("remote");
+            commandLineRemoteAdd.addArgument("add");
+            commandLineRemoteAdd.addArgument("gitlab");
+            commandLineRemoteAdd.addArgument(migratorRequest.getToGitlab().concat(migratorRequest.getToName()).concat(".git"));
+            defaultExecutor.execute(commandLineRemoteAdd);
+        }
+
+        CommandLine commandLinePushMirror = CommandLine.parse("git");
+        commandLinePushMirror.addArgument("push");
+        commandLinePushMirror.addArgument("--mirror");
+        commandLinePushMirror.addArgument("gitlab");
+        defaultExecutor.execute(commandLinePushMirror);
+
 
     }
 

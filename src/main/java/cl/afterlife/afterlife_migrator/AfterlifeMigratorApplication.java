@@ -8,8 +8,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class AfterlifeMigratorApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AfterlifeMigratorApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AfterlifeMigratorApplication.class, args);
+    }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class MigratorController {
     private MigratorService migratorService;
 
     @PostMapping(value = "/repositories/github/to/gitlab", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, HashMap<String, String>>> repositoriesMigratorGithubToGitlab(@RequestHeader(name = "Gitlab-Token") String gitlabToken, @Valid @RequestBody MigratorRequest migratorRequest) {
+    public ResponseEntity<Map<String, HashMap<String, String>>> repositoriesMigratorGithubToGitlab(@RequestHeader(name = "Gitlab-Token") String gitlabToken, @Valid @RequestBody MigratorRequest migratorRequest) throws IOException {
         return this.migratorService.migratorFromGithubToGitlab(gitlabToken, migratorRequest);
     }
 
