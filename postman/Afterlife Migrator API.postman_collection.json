@@ -1,0 +1,48 @@
+{
+	"info": {
+		"_postman_id": "c8b70778-d57f-44fe-abfc-90f4b7e9be2d",
+		"name": "Afterlife Migrator API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26784985"
+	},
+	"item": [
+		{
+			"name": "Migrator [Github -> Gitlab]",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Gitlab-Token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"from-github\": \"https://github.com/WindBlad3/\",\r\n    \"from-name\": \"afterlife-eureka-server\",\r\n    \"to-gitlab\": \"https://gitlab.com/afterlife6393803/\",\r\n    \"to-name\": \"afterlife-eureka-server-migrated\",\r\n    \"download-directory\": \"./repositories/\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/afterlife-migrator/repositories/github/to/gitlab",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"afterlife-migrator",
+						"repositories",
+						"github",
+						"to",
+						"gitlab"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
