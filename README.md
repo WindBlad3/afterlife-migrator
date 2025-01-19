@@ -9,6 +9,10 @@ The following was discovered as part of building this project:
 
 # Getting Started
 
+### Start
+
+Locate in the build/libs folder and then run the command java -jar <name-of-compile-jar>.jar
+
 ### Reference Documentation
 
 For further reference, please consider the following sections:
