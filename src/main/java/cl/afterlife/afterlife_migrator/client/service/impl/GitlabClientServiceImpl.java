@@ -23,29 +23,22 @@ public class GitlabClientServiceImpl implements GitlabClientService {
     private ObjectMapper objectMapper;
 
     @Override
-    public ResponseEntity<ObjectNode> createProject(String url, String token, String name, String namespaceId, String visibility) {
+    public void createProject(String url, String token, String name, String namespaceId, String visibility) {
         try {
             CreateProjectRequest createProjectRequest = CreateProjectRequest.builder().name(name).namespaceId(namespaceId).visibility("private").build();
             log.info("[Gitlab Client][Open feign][Create project] - Request -> {}", this.objectMapper.convertValue(createProjectRequest, ObjectNode.class));
             ResponseEntity<ObjectNode> response = this.clientBuilders.createClient(url, GitlabClient.class).createProject(token, createProjectRequest);
-            log.info("[Gitlab Client][Open feign][Create project] - Response -> {}", response.getBody());
-            return response;
+            if (response.getStatusCode().is2xxSuccessful()) {
+                log.debug("[Gitlab Client][Open feign][Create project] - Response detail -> {}", response.getBody());
+                log.info("[Gitlab Client][Open feign][Create project] - Response -> Project created successfully in Gitlab!");
+            }
         } catch (FeignException fe) {
-            log.error("[Gitlab Client][Open feign][Create project] - Error:", fe);
-            throw fe;
-        }
-    }
-
-    @Override
-    public ResponseEntity<ObjectNode> getGroup(String url, String token, String id) {
-        try {
-            log.info("[Gitlab Client][Open feign][Get Group] - Params -> id: {}.", id);
-            ResponseEntity<ObjectNode> response = this.clientBuilders.createClient(url, GitlabClient.class).getGroup(token, id);
-            log.info("[Gitlab Client][Open feign][Get Group] - Response -> {}", response.getBody());
-            return response;
-        } catch (FeignException fe) {
-            log.error("[Gitlab Client][Open feign][Get Group] - Error:", fe);
-            throw fe;
+            if (fe.status() == 400 && fe.getMessage().contains("has already been taken")) {
+                log.warn("[Gitlab Client][Open feign][Create project] - Warn: The project already exists, the files from the source repository will be uploaded...");
+            } else {
+                log.error("[Gitlab Client][Open feign][Create project] - Unexpected error trying create the project in Gitlab!, Error:", fe);
+                throw fe;
+            }
         }
     }
 }

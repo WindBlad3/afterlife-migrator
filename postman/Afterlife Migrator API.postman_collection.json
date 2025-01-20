@@ -15,11 +15,16 @@
 						"key": "Gitlab-Token",
 						"value": "",
 						"type": "text"
+					},
+					{
+						"key": "Gitlab-Group-Id",
+						"value": "100851405",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"from-github\": \"https://github.com/WindBlad3/\",\r\n    \"from-name\": \"RESTful-Web-Service-Practice-JavaApplication\",\r\n    \"to-gitlab\": \"https://gitlab.com/afterlife6393803/\",\r\n    \"to-name\": \"RESTful-Web-Service-Practice-JavaApplication-migrated\",\r\n    \"download-directory\": \"./repositories/\"\r\n}",
+					"raw": "{\r\n    \"from-github\": \"{{from-github}}\",\r\n    \"from-name\": \"{{from-name}}\",\r\n    \"to-gitlab\": \"{{to-gitlab}}\",\r\n    \"to-name\": \"{{to-name}}\",\r\n    \"download-directory\": \"./repositories\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
