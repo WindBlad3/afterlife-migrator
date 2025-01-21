@@ -8,5 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface MigratorService {
-    ResponseEntity<Map<String, HashMap<String, String>>> migratorFromGithubToGitlab(String gitlabToken, String gitlabGroupId, MigratorRequest migratorRequest) throws IOException;
+    ResponseEntity<Map<String, HashMap<String, String>>> migrateFromGithubToGitlab(String gitlabToken, String gitlabGroupId, MigratorRequest migratorRequest) throws IOException;
+
+    ResponseEntity<Map<String, HashMap<String, String>>> updateFromGithubToGitlab(String gitlabToken, String gitlabGroupId, MigratorRequest migratorRequest) throws IOException;
 }

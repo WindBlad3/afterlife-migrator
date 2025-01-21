@@ -20,10 +20,17 @@ public class MigratorController {
     private MigratorService migratorService;
 
     @PostMapping(value = "/repositories/github/to/gitlab", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, HashMap<String, String>>> repositoriesMigratorGithubToGitlab(@RequestHeader(name = "Gitlab-Token") String gitlabToken,
-                                                                                                   @RequestHeader(name = "Gitlab-Group-Id") String gitlabGroupId,
-                                                                                                   @Valid @RequestBody MigratorRequest migratorRequest) throws IOException {
-        return this.migratorService.migratorFromGithubToGitlab(gitlabToken, gitlabGroupId, migratorRequest);
+    public ResponseEntity<Map<String, HashMap<String, String>>> repositoriesMigrateGithubToGitlab(@RequestHeader(name = "Gitlab-Token") String gitlabToken,
+                                                                                                  @RequestHeader(name = "Gitlab-Group-Id") String gitlabGroupId,
+                                                                                                  @Valid @RequestBody MigratorRequest migratorRequest) throws IOException {
+        return this.migratorService.migrateFromGithubToGitlab(gitlabToken, gitlabGroupId, migratorRequest);
+    }
+
+    @PatchMapping(value = "/repositories/github/to/gitlab", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, HashMap<String, String>>> repositoriesUpdateGithubToGitlab(@RequestHeader(name = "Gitlab-Token") String gitlabToken,
+                                                                                                 @RequestHeader(name = "Gitlab-Group-Id") String gitlabGroupId,
+                                                                                                 @Valid @RequestBody MigratorRequest migratorRequest) throws IOException {
+        return this.migratorService.updateFromGithubToGitlab(gitlabToken, gitlabGroupId, migratorRequest);
     }
 
 }
