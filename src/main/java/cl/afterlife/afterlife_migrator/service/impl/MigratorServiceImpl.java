@@ -168,13 +168,13 @@ public class MigratorServiceImpl implements MigratorService {
         }
 
         CommandLine commandLinePushMirrorAll2 = CommandLine.parse("git");
-        commandLinePushMirrorAll2.addArgument("pull");
+        commandLinePushMirrorAll2.addArgument("remote");
+        commandLinePushMirrorAll2.addArgument("update");
         defaultExecutor.execute(commandLinePushMirrorAll2);
 
         CommandLine commandLinePushMirrorAll = CommandLine.parse("git");
         commandLinePushMirrorAll.addArgument("push");
-        commandLinePushMirrorAll.addArgument("mirror");
-        commandLinePushMirrorAll.addArgument("--all");
+        commandLinePushMirrorAll.addArgument("--mirror");
         defaultExecutor.execute(commandLinePushMirrorAll);
 
         CommandLine commandLinePushMirrorTags = CommandLine.parse("git");
