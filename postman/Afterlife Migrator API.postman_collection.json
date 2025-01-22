@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Migrator [Github -> Gitlab]",
+			"name": "Migrate [Github -> Gitlab]",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -113,6 +113,49 @@
 					"body": "{\n    \"Afterl1f3-migrat0r\": {\n        \"result\": \"Migration executed successfully!\",\n        \"status\": \"OK\"\n    }\n}"
 				}
 			]
+		},
+		{
+			"name": "Update [Github -> Gitlab]",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Gitlab-Token",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Gitlab-Group-Id",
+						"value": "100851405",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"from-github\": \"{{from-github}}\",\r\n    \"from-name\": \"{{from-name}}\",\r\n    \"to-gitlab\": \"{{to-gitlab}}\",\r\n    \"to-name\": \"{{to-name}}\",\r\n    \"download-directory\": \"./repositories\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/afterlife-migrator/repositories/github/to/gitlab",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"afterlife-migrator",
+						"repositories",
+						"github",
+						"to",
+						"gitlab"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
